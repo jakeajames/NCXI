@@ -2,6 +2,7 @@
 #import "NCXISearchWidgetsPageViewController.h"
 
 @interface SBLockScreenDateViewController : UIViewController
+
 @end
 
 @interface NCXIViewController : UIViewController <UIScrollViewDelegate>

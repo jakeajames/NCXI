@@ -2,6 +2,10 @@
 
 #import <objc/runtime.h>
 
+@interface UIView (Private)
+-(void)setAlignmentPercent:(CGFloat)arg1;
+@end
+
 @interface SBFWallpaperView : UIView
 @property (nonatomic,retain) UIImage * wallpaperImage;              //@synthesize displayedImage=_displayedImage - In the implementation block
 @end
@@ -25,7 +29,12 @@
   CGRect screenBounds = [[UIScreen mainScreen] bounds];
   self.contentScrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
   self.contentScrollView.contentSize = CGSizeMake(screenBounds.size.width * 2, screenBounds.size.height);
+  self.contentScrollView.contentOffset = CGPointMake(screenBounds.size.width,0);
   self.contentScrollView.pagingEnabled = TRUE;
+
+  [self.contentScrollView setShowsHorizontalScrollIndicator:NO];
+  [self.contentScrollView setShowsVerticalScrollIndicator:NO];
+
   self.contentScrollView.delegate = self;
 
   self.wallpaperView = [[UIImageView alloc] initWithFrame:self.view.bounds];
@@ -39,16 +48,22 @@
   [self.view addSubview:self.blurView];
 
   self.dateView = [[NSClassFromString(@"SBLockScreenDateViewController") alloc] init];
-  self.dateView.view.frame = CGRectMake(0, screenBounds.size.height/10.5, screenBounds.size.width,screenBounds.size.height/5);
+  self.dateView.view.frame = CGRectMake(screenBounds.size.width/12, screenBounds.size.height/10.5, screenBounds.size.width - (screenBounds.size.width/6),screenBounds.size.height/5);
   [self.view addSubview:self.dateView.view];
 
+  self.pageControl = [[[UIPageControl alloc] init] autorelease];
+  self.pageControl.frame = CGRectMake(screenBounds.size.width/2 - screenBounds.size.width/16,screenBounds.size.height - screenBounds.size.height/32,screenBounds.size.width/8,screenBounds.size.height/32);
+  self.pageControl.numberOfPages = 2;
+  self.pageControl.currentPage = 0;
+  [self.view addSubview:self.pageControl];
+
   self.notificationsPage = [[UIView alloc] init];
-  self.notificationsPage.frame = CGRectMake(screenBounds.size.width, 0, screenBounds.size.height, screenBounds.size.width);
+  self.notificationsPage.frame = CGRectMake(screenBounds.size.width, 0, screenBounds.size.width, screenBounds.size.height - screenBounds.size.height/32);
+  self.notificationsPage.clipsToBounds = TRUE;
   [self.contentScrollView addSubview:self.notificationsPage];
 
-
   self.widgetsPage = [[UIView alloc] init];
-  self.widgetsPage.frame = CGRectMake(0, 0, screenBounds.size.height, screenBounds.size.width);
+  self.widgetsPage.frame = CGRectMake(0, 0, screenBounds.size.width, screenBounds.size.height);
   [self.contentScrollView addSubview:self.widgetsPage];
 
   self.widgetsViewController = [[NSClassFromString(@"NCXISearchWidgetsPageViewController") alloc] init];
@@ -56,12 +71,6 @@
   [self.widgetsPage addSubview:self.widgetsViewController.view];
 
   [self.view addSubview:self.contentScrollView];
-
-  self.pageControl = [[[UIPageControl alloc] init] autorelease];
-  self.pageControl.frame = CGRectMake(screenBounds.size.width/2 - screenBounds.size.width/16,screenBounds.size.height - screenBounds.size.height/32,screenBounds.size.width/8,screenBounds.size.height/32);
-  self.pageControl.numberOfPages = 2;
-  self.pageControl.currentPage = 0;
-  [self.view addSubview:self.pageControl];
 
   return self;
 }
@@ -75,9 +84,15 @@
   self.wallpaperView.frame = self.view.bounds;
 }
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    CGFloat pageWidth = self.contentScrollView.frame.size.width; // you need to have a **iVar** with getter for scrollView
-    float fractionalPage = self.contentScrollView.contentOffset.x / pageWidth;
-    NSInteger page = lround(fractionalPage);
-    self.pageControl.currentPage = page; // you need to have a **iVar** with getter for pageControl
+  //CGRect screenBounds = [[UIScreen mainScreen] bounds];
+
+  CGFloat pageWidth = self.contentScrollView.frame.size.width; // you need to have a **iVar** with getter for scrollView
+  float fractionalPage = self.contentScrollView.contentOffset.x / pageWidth;
+  NSInteger page = lround(fractionalPage);
+
+  self.pageControl.currentPage = page; // you need to have a **iVar** with getter for pageControl
+  self.pageControl.alpha = fractionalPage;
+
+  [self.dateView.view setAlignmentPercent:(1 - fractionalPage)];
 }
 @end

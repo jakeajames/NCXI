@@ -1,0 +1,10 @@
+Package: com.laughingquoll.notificationcenterxi
+Name: NotificationCenterXI
+Depends: mobilesubstrate
+Architecture: iphoneos-arm
+Description: iOS 11 style notification center.
+Maintainer: LaughingQuoll
+Author: LaughingQuoll
+Section: Tweaks
+Version: 1.0-34+debug
+Installed-Size: 148
