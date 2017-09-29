@@ -46,6 +46,15 @@
   self.notificationsPage.frame = CGRectMake(screenBounds.size.width, 0, screenBounds.size.height, screenBounds.size.width);
   [self.contentScrollView addSubview:self.notificationsPage];
 
+
+  self.widgetsPage = [[UIView alloc] init];
+  self.widgetsPage.frame = CGRectMake(0, 0, screenBounds.size.height, screenBounds.size.width);
+  [self.contentScrollView addSubview:self.widgetsPage];
+
+  self.widgetsViewController = [[NSClassFromString(@"NCXISearchWidgetsPageViewController") alloc] init];
+  self.widgetsViewController.view.frame = CGRectMake(0, 0, screenBounds.size.width,screenBounds.size.height);
+  [self.widgetsPage addSubview:self.widgetsViewController.view];
+
   [self.view addSubview:self.contentScrollView];
 
   self.pageControl = [[[UIPageControl alloc] init] autorelease];

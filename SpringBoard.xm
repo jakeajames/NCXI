@@ -36,6 +36,10 @@
   _notificationCenterWithSearchViewController.notificationListViewController.view.tag = 1036;
   _notificationCenterWithSearchViewController.notificationListViewController.view.frame = CGRectMake(0,screenBounds.size.height/3, screenBounds.size.width, screenBounds.size.height - screenBounds.size.height/3);
   [self.notificationCenterViewController.notificationsPage addSubview:_notificationCenterWithSearchViewController.notificationListViewController.view];
+
+  [self.notificationCenterViewController.widgetsViewController viewWillAppear:TRUE];
+  [self.notificationCenterViewController.widgetsViewController viewDidAppear:TRUE];
+  [self.notificationCenterViewController.widgetsViewController willActivateHosting];
 }
 -(void)_setContainerFrame:(CGRect)arg1 {
     %orig;
