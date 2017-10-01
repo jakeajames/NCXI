@@ -11,7 +11,7 @@ Licence:
 
 3. Please tell me about any usage.
 
-4. I need to learn how to write a licence. 
+4. I need to learn how to write a licence.
 
 ## Install
 

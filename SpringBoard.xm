@@ -14,6 +14,9 @@
 @property (nonatomic,readonly) NCNotificationListViewController * notificationListViewController;
 @end
 
+@interface UIStatusBar : UIView
+@end
+
 %hook SBNotificationCenterViewController
 %property (retain, nonatomic) NCXIViewController *notificationCenterViewController;
 -(void)viewDidLoad{
@@ -40,6 +43,11 @@
   [self.notificationCenterViewController.widgetsViewController viewWillAppear:TRUE];
   [self.notificationCenterViewController.widgetsViewController viewDidAppear:TRUE];
   [self.notificationCenterViewController.widgetsViewController willActivateHosting];
+
+  UIStatusBar* _statusBar = [self valueForKey:@"_statusBar"];
+  _statusBar.hidden = FALSE;
+  [self.notificationCenterViewController.view addSubview:_statusBar];
+
 }
 -(void)_setContainerFrame:(CGRect)arg1 {
     %orig;
@@ -57,8 +65,8 @@
 }
 %end
 
+// By default the notifications are transparent because the NC has its own blur. We don't have one so we need to adjust.
 %hook NCMaterialView
-
 - (id)initWithStyleOptions:(unsigned long long)arg1 {
   if(arg1 == 1){
     return %orig(4);
@@ -67,6 +75,7 @@
 }
 %end
 
+// Fixing notifications view location.
 %hook UIView
 -(void)setFrame:(CGRect)frame{
   if(self.tag == 1036){
@@ -75,5 +84,19 @@
     frame.origin.y = screenBounds.size.height/3.5;
   }
   %orig(frame);
+}
+%end
+
+// Adjusting the widgets page frame because we have to make sure the long look of notifications appears.
+%hook NCLongLookPresentationController
+-(void)presentationTransitionWillBegin {
+  %orig;
+  [[NCXIViewController sharedInstance] adjustWidgetsForLongLook:TRUE];
+  [NCXIViewController sharedInstance].contentScrollView.scrollEnabled = FALSE;
+}
+-(void)dismissalTransitionWillBegin {
+  %orig;
+  [[NCXIViewController sharedInstance] adjustWidgetsForLongLook:FALSE];
+  [NCXIViewController sharedInstance].contentScrollView.scrollEnabled = TRUE;
 }
 %end

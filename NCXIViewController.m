@@ -23,10 +23,17 @@
 @end
 
 @implementation NCXIViewController
+static NCXIViewController *sharedInstance;
++(id)sharedInstance{
+  return sharedInstance;
+}
 -(id)init {
   self = [super init];
 
+  sharedInstance = self;
+
   CGRect screenBounds = [[UIScreen mainScreen] bounds];
+
   self.contentScrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
   self.contentScrollView.contentSize = CGSizeMake(screenBounds.size.width * 2, screenBounds.size.height);
   self.contentScrollView.contentOffset = CGPointMake(screenBounds.size.width,0);
@@ -84,7 +91,7 @@
   self.wallpaperView.frame = self.view.bounds;
 }
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-  //CGRect screenBounds = [[UIScreen mainScreen] bounds];
+  CGRect screenBounds = [[UIScreen mainScreen] bounds];
 
   CGFloat pageWidth = self.contentScrollView.frame.size.width; // you need to have a **iVar** with getter for scrollView
   float fractionalPage = self.contentScrollView.contentOffset.x / pageWidth;
@@ -94,5 +101,21 @@
   self.pageControl.alpha = fractionalPage;
 
   [self.dateView.view setAlignmentPercent:(1 - fractionalPage)];
+
+  self.dateView.view.frame = CGRectMake(self.dateView.view.frame.origin.x, screenBounds.size.height/10.5, self.dateView.view.frame.size.width, self.dateView.view.frame.size.height);
+
+}
+-(void)adjustVerticalDateOffset:(CGPoint)point {
+  CGRect screenBounds = [[UIScreen mainScreen] bounds];
+
+  self.dateView.view.frame = CGRectMake(self.dateView.view.frame.origin.x, -point.y + screenBounds.size.height/10.5, self.dateView.view.frame.size.width, self.dateView.view.frame.size.height);
+}
+-(void)adjustWidgetsForLongLook:(BOOL)active {
+  CGRect screenBounds = [[UIScreen mainScreen] bounds];
+  if(active){
+    self.widgetsPage.frame = CGRectMake(screenBounds.size.width, 0, screenBounds.size.width, screenBounds.size.height);
+  } else {
+    self.widgetsPage.frame = CGRectMake(0, 0, screenBounds.size.width, screenBounds.size.height);
+  }
 }
 @end
