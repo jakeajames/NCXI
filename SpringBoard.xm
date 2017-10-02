@@ -19,17 +19,22 @@
 
 %hook SBNotificationCenterViewController
 %property (retain, nonatomic) NCXIViewController *notificationCenterViewController;
--(void)viewDidLoad{
+-(void)viewDidLoad {
   %orig;
 
   for(UIView *subview in self.view.subviews){
     subview.hidden = TRUE;
   }
 
+}
+-(void)viewWillAppear:(BOOL)animated{
+  %orig;
+  [self.view.subviews lastObject].hidden = YES;
   self.notificationCenterViewController = [[NCXIViewController alloc] init];
   self.notificationCenterViewController.view.frame = self.view.bounds;
   [self.view addSubview:self.notificationCenterViewController.view];
 }
+
 -(void)viewDidLayoutSubviews {
   %orig;
 
