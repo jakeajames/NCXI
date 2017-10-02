@@ -46,7 +46,7 @@ static NCXIViewController *sharedInstance;
   
   CGRect newFrame = self.view.bounds;
   newFrame.origin.y = self.view.bounds.size.height;
-  self.wallpaperView = [[UIImageView alloc] initWithFrame:frame];
+  self.wallpaperView = [[UIImageView alloc] initWithFrame:newFrame];
   [self.view addSubview:self.wallpaperView];
 
   SBFStaticWallpaperView *wallpaperView = [[objc_getClass("SBWallpaperController") sharedInstance] _wallpaperViewForVariant:0];
