@@ -29,7 +29,7 @@
 }
 -(void)viewWillAppear:(BOOL)animated{
   %orig;
-  [self.view.subviews lastObject].hidden = YES;
+  [self.notificationCenterViewController.view removeFromSuperview];
   self.notificationCenterViewController = [[NCXIViewController alloc] init];
   self.notificationCenterViewController.view.frame = self.view.bounds;
   [self.view addSubview:self.notificationCenterViewController.view];
