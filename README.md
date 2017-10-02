@@ -16,3 +16,7 @@ Licence:
 ## Install
 
 If you do want to install this you can, use the deb in the packages folder.
+
+## TODO
+
+- Fix wallpaper in landscape mode
