@@ -1,6 +1,14 @@
 #import "NCXIViewController.h"
-
 #import <objc/runtime.h>
+
+bool isOnSpringBoard() {
+  if ([[objc_getClass("UIApplication") sharedApplication] _accessibilityFrontMostApplication] != nil) {
+    return false;
+  }
+  else {
+    return true;
+  }
+} 
 
 @interface UIView (Private)
 -(void)setAlignmentPercent:(CGFloat)arg1;
@@ -44,9 +52,15 @@ static NCXIViewController *sharedInstance;
 
   self.contentScrollView.delegate = self;
   
-  CGRect newFrame = self.view.bounds;
-  newFrame.origin.y = self.view.bounds.size.height;
-  self.wallpaperView = [[UIImageView alloc] initWithFrame:newFrame];
+  if (isOnSpringBoard()) {
+    CGRect newFrame = self.view.bounds;
+    newFrame.origin.y = self.view.bounds.size.height;
+    self.wallpaperView = [[UIImageView alloc] initWithFrame:newFrame];
+  }
+  else {
+    self.wallpaperView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+  }
+  
   [self.view addSubview:self.wallpaperView];
 
   SBFStaticWallpaperView *wallpaperView = [[objc_getClass("SBWallpaperController") sharedInstance] _wallpaperViewForVariant:0];
@@ -84,23 +98,32 @@ static NCXIViewController *sharedInstance;
   return self;
 }
 -(void)setProgress:(CGFloat)progress {
-  CALayer *maskLayer = [CALayer layer];
-  maskLayer.backgroundColor = [UIColor blackColor].CGColor;
-  CGRect maskFrame = self.wallpaperView.frame;
-  maskFrame.origin.y = ((1 - progress) * self.wallpaperView.frame.size.height) - self.wallpaperView.frame.size.height;
-  maskLayer.frame = maskFrame;
-  self.wallpaperView.layer.mask = maskLayer;
-  self.wallpaperView.alpha = (1 - progress)*1.15;
+  if (isOnSpringBoard()) {
+    CALayer *maskLayer = [CALayer layer];
+    maskLayer.backgroundColor = [UIColor blackColor].CGColor;
+    CGRect maskFrame = self.wallpaperView.frame;
+    maskFrame.origin.y = ((1 - progress) * self.wallpaperView.frame.size.height) - self.wallpaperView.frame.size.height;
+    maskLayer.frame = maskFrame;
+    self.wallpaperView.layer.mask = maskLayer;
+    self.wallpaperView.alpha = (1 - progress)*1.15;
   
-  CGRect newFrame = self.wallpaperView.frame;
-  newFrame.origin.y = progress * self.wallpaperView.frame.size.height;
-  self.wallpaperView.frame = newFrame;
+    CGRect newFrame = self.wallpaperView.frame;
+    newFrame.origin.y = progress * self.wallpaperView.frame.size.height;
+    self.wallpaperView.frame = newFrame;
+  } 
+  else {
+    self.wallpaperView.layer.mask = nil;
+    self.wallpaperView.alpha = (1 - progress)*1.15;
+  }
     
-  [self.blurView setProgress:progress];
+   [self.blurView setProgress:progress];
 }
 -(void)viewDidLayoutSubviews {
   SBFStaticWallpaperView *wallpaperView = [[objc_getClass("SBWallpaperController") sharedInstance] _wallpaperViewForVariant:0];
   self.wallpaperView.image = [wallpaperView.displayedImage copy];
+  if (!isOnSpringBoard()) {
+    self.wallpaperView.frame = self.view.bounds;
+  }
 }
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
   CGRect screenBounds = [[UIScreen mainScreen] bounds];
