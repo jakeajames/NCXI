@@ -1,6 +1,10 @@
 #import "NCXIViewController.h"
 #import <objc/runtime.h>
 
+@interface UIApplication (tweak)
+ -(id)_accessibilityFrontMostApplication;
+@end
+  
 bool isOnSpringBoard() {
   if ([[objc_getClass("UIApplication") sharedApplication] _accessibilityFrontMostApplication] != nil) {
     return false;
