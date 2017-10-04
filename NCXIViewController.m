@@ -71,6 +71,8 @@ static NCXIViewController *sharedInstance;
 
   SBFStaticWallpaperView *wallpaperView = [[objc_getClass("SBWallpaperController") sharedInstance] _wallpaperViewForVariant:0];
   self.wallpaperView.image = [wallpaperView.wallpaperImage copy];
+  self.wallpaperView.contentMode = UIViewContentModeScaleAspectFill;
+  self.wallpaperView.clipsToBounds = true;
 
   self.blurView = [[NCXIBlurView alloc] init];
   self.blurView.frame = self.view.bounds;
