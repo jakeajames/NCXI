@@ -13,9 +13,9 @@ Licence:
 
 4. ~~I~~ Quoll needs to learn how to write a licence.
 
-## InstallNOT
+## Install
 
-If you do want to install this you can compile it
+If you want to install this you can compile it
 
 ## @LaughingQuoll has to fix:
 
