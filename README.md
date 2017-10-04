@@ -21,3 +21,4 @@ If you want to install this you can compile it
 
 - The notifications, especially on iPad. They're not centered, they're transparent instead of blurry (unless used with Noctis... LQ, adding a new blur view on Noctis is probably why it is laggy, lol)
 - Safe Mode issues, which have to do with notifications as well. i.e when I open NC with a notification there, close it, and open it again without clearing notifications will result in Safe Mode
+- My ugly code?
