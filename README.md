@@ -1,5 +1,5 @@
 # NCXI
-Source Code and Issue Tracker for NCXI
+Source Code and Issue Tracker for NCXI + mega improvements by me
 
 Do not compile / install this yet it is not production ready.
 
@@ -9,14 +9,15 @@ Licence:
 
 2. If you use the code in this repository your code must also be open sourced.
 
-3. Please tell me about any usage.
+3. Please tell ~~me~~ Quoll about any usage.
 
-4. I need to learn how to write a licence.
+4. ~~I~~ Quoll needs to learn how to write a licence.
 
-## Install
+## InstallNOT
 
-If you do want to install this you can, use the deb in the packages folder.
+If you do want to install this you can compile it
 
-## TODO
+## @LaughingQuoll has to fix:
 
-- Fix wallpaper in landscape mode
+- The notifications, especially on iPad. They're not centered, they're transparent instead of blurry (unless used with Noctis... LQ, adding a new blur view on Noctis is probably why it is laggy, lol)
+- Safe Mode issues, which have to do with notifications as well. i.e when I open NC with a notification there, close it, and open it again without clearing notifications will result in Safe Mode
